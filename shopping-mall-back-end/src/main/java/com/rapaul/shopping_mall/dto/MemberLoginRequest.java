@@ -2,7 +2,7 @@ package com.rapaul.shopping_mall.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public class UserRegisterRequest {
+public class MemberLoginRequest {
 
 	@NotNull
 	private String account;

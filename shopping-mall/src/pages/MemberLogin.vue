@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>管理者登入</h1>
+    <h1>會員登入</h1>
     <div id="form-content">
       <form @submit.prevent="handleSubmit">
         <div class="form-row">
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "UserLogin",
+  name: "MemberLogin",
   data() {
     return {
       account: "",
@@ -32,7 +32,7 @@ export default {
       console.log(`Account: ${this.account}, Password: ${this.password}`);
       //發起登入請求
       this.$axios
-        .post("/users/login", {
+        .post("/members/login", {
           account: this.account,
           password: this.password,
         })
@@ -40,12 +40,13 @@ export default {
           console.log(response);
           // 獲取回傳內容JSON
           const data = response.data;
+          console.log(data);
 
           //紀錄登入資訊
-          this.$store.commit("SET_USER", data);
+          this.$store.commit("SET_MEMBER", data);
 
-          // 登入成功，導航到 product-setting 頁面
-          this.$router.push("/product-setting");
+          // 登入成功，導航到 product-list 頁面
+          this.$router.push("/product-list");
         })
         .catch((error) => {
           // 登入失敗，處理錯誤

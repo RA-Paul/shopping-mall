@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.rapaul.shopping_mall.dao.ProductDao;
+import com.rapaul.shopping_mall.dto.ProductQueryParams;
+import com.rapaul.shopping_mall.dto.ProductRequest;
 import com.rapaul.shopping_mall.model.Product;
 import com.rapaul.shopping_mall.service.ProductService;
 
@@ -22,8 +24,28 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getProducts() {
-		return productDao.getProducts();
+	public List<Product> getProducts(ProductQueryParams productQueryParams) {
+		return productDao.getProducts(productQueryParams);
 	}
+
+	@Override
+	public Product getProductById(String productId) {
+		return productDao.getProductById(productId);
+	}
+
+	@Override
+	public String createProduct(ProductRequest productRequest) {
+		
+		String maxProductId = productDao.getProductMaxId();
+		String prefix = "P"; 
+	    int serialNumber = Integer.parseInt(maxProductId.substring(1)) + 1; // 提取流水号并加一
+	    String productId = String.format("%s%03d", prefix, serialNumber);
+		productRequest.setProductId(productId);
+	    
+	    
+		return productDao.createProduct(productRequest);
+	}
+	
+	
 
 }

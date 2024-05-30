@@ -1,8 +1,13 @@
 package com.rapaul.shopping_mall.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class UserLoginRequest {
-	
+
+	@NotNull
 	private String account;
+
+	@NotNull
 	private String password;
 	
 	public String getAccount() {
