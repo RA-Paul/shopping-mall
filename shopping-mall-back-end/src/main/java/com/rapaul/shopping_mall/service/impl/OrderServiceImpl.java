@@ -36,10 +36,20 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	OrderDao orderDao;
 	
-	
+	@Override
+	public List<Order> getOrderByMemberId(Integer memberId) {
+		return orderDao.getOrderByMemberId(memberId);
+	}
+
 	@Override
 	public Order getOrderById(String orderId) {
 		return orderDao.getOrderById(orderId);
+	}
+	
+
+	@Override
+	public List<OrderDetail> getOrderDetailByOrderId(String orderId) {
+		return orderDao.getOrderDetailByOrderId(orderId);
 	}
 
 	@Transactional

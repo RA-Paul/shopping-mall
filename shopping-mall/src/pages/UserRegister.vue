@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>會員登入</h1>
+    <h1>管理者註冊</h1>
     <div id="form-content">
       <form @submit.prevent="handleSubmit">
         <div class="form-row">
@@ -11,8 +11,7 @@
           <label for="password">密碼:</label>
           <input type="password" id="password" required v-model="password" />
         </div>
-        <button type="submit">登入</button>
-        <p><a @click="toMemberRegister">還不是會員？</a></p>
+        <button type="submit">註冊</button>
       </form>
     </div>
   </div>
@@ -20,7 +19,7 @@
 
 <script>
 export default {
-  name: "MemberLogin",
+  name: "UserRegister",
   data() {
     return {
       account: "",
@@ -34,32 +33,23 @@ export default {
         return;
       }
 
-      //發起登入請求
+      //發起註冊請求
       this.$axios
-        .post("/members/login", {
+        .post("/users/register", {
           account: this.account,
           password: this.password,
         })
         .then((response) => {
           console.log(response);
-          // 獲取回傳內容JSON
-          const data = response.data;
-          console.log(data);
-
-          //紀錄登入資訊
-          this.$store.commit("SET_MEMBER", data);
-
-          // 登入成功，導航到 product-list 頁面
-          this.$router.push("/product-list");
+          alert("註冊成功，開始登入使用吧");
+          // 註冊成功，導航到 member-login 頁面
+          this.$router.push("/user-login");
         })
         .catch((error) => {
-          alert("帳號或密碼錯誤");
+          alert("註冊失敗");
           // 登入失敗，處理錯誤
           console.error(error);
         });
-    },
-    toMemberRegister() {
-      this.$router.push("/member-register");
     },
   },
 };
@@ -91,15 +81,5 @@ button {
   border-radius: 5px;
   width: 250px;
   margin: 0 auto;
-}
-
-p {
-  cursor: pointer;
-  font-size: 0.2em;
-  margin-bottom: 0px;
-}
-
-a:hover {
-  color: blue;
 }
 </style>

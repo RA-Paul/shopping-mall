@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public class ProductRequest {
 	
-	private String productId;
-	
 	@NotNull
 	private String productName;
 	
@@ -15,12 +13,6 @@ public class ProductRequest {
 	@NotNull
 	private Integer quantity;
 	
-	public String getProductId() {
-		return productId;
-	}
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
 	public String getProductName() {
 		return productName;
 	}

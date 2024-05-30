@@ -1,4 +1,5 @@
 <template>
+  <UserHeader />
   <div style="width: 90%; margin: auto">
     <div class="action-content">
       <button class="action-button" @click="openModal">新增</button>
@@ -10,7 +11,6 @@
           <th>產品名稱</th>
           <th>價格</th>
           <th>庫存</th>
-          <th>編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -19,7 +19,6 @@
           <td>{{ product.productName }}</td>
           <td>{{ formatCurrency(product.price) }}</td>
           <td>{{ product.quantity }}</td>
-          <td></td>
         </tr>
       </tbody>
     </table>
@@ -29,16 +28,7 @@
     <div class="modal" v-if="showModal">
       <div class="modal-content">
         <div id="form-content">
-          <form @submit.prevent="handleSubmit">
-            <div class="form-row">
-              <label for="productId">產品編號:</label>
-              <input
-                type="text"
-                id="productId"
-                v-model="product.productId"
-                required
-              />
-            </div>
+          <form @submit.prevent="createProduct">
             <div class="form-row">
               <label for="productName">產品名稱:</label>
               <input
@@ -67,7 +57,9 @@
               />
             </div>
             <div class="form-buttons">
-              <button class="action-button" @click="closeModal">取消</button>
+              <button type="button" class="action-button" @click="closeModal">
+                取消
+              </button>
               <button type="submit" class="action-button">創建</button>
             </div>
           </form>
@@ -78,14 +70,18 @@
 </template>
 
 <script>
+import UserHeader from "@/components/UserHeader.vue";
+
 export default {
   name: "ProductSetting",
+  components: {
+    UserHeader,
+  },
   data() {
     return {
       productList: [],
       showModal: false,
       product: {
-        productId: "",
         productName: "",
         price: 0,
         quantity: 0,
@@ -108,7 +104,6 @@ export default {
     createProduct() {
       // 檢差輸入項目
       if (
-        !this.product.productId ||
         !this.product.productName ||
         !this.product.price ||
         !this.product.quantity
@@ -120,11 +115,13 @@ export default {
       this.$axios
         .post("/products", this.product)
         .then((response) => {
+          alert("新增成功");
           console.log(response);
           this.getProducts();
           this.closeModal();
         })
         .catch((error) => {
+          alert("新增失敗");
           console.error(error);
         });
     },
@@ -134,6 +131,7 @@ export default {
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
+        maximumFractionDigits: 0,
       }).format(value);
     },
 
@@ -151,7 +149,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 table {
   width: 100%;
   margin-top: 20px;

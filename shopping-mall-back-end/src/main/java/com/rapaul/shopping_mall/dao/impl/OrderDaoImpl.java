@@ -28,8 +28,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order getOrderById(String orderId) {
 
-		String sql = "SELECT `order_id` , `member_id` , `price` , `pay_status` , "
-				+ " `created_date` , `last_modified_date` FROM `order` WHERE `order_id` = :orderId";
+		String sql = "CALL GetOrderById(:orderId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("orderId", orderId);
@@ -44,9 +43,9 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public List<Order> getOrderByMemberId(String memberId) {
-		String sql = "SELECT `order_id` , `member_id`, `price`, `pay_status`, "
-				+ "`created_date`, `last_modified_date` FROM `order` WHERE `member_id` = :memberId";
+	public List<Order> getOrderByMemberId(Integer memberId) {
+
+		String sql = "CALL GetOrderByMemberId(:memberId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("memberId", memberId);
@@ -58,8 +57,8 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<OrderDetail> getOrderDetailByOrderId(String orderId) {
-		String sql = "SELECT `order_item_sn` , `order_id`, `product_id`, `quantity`, `stand_price`, `item_price`, "
-				+ "`created_date`, `last_modified_date` FROM `order_detail` WHERE `order_id` = :orderId";
+
+		String sql = "CALL GetOrderDetailByOrderId(:orderId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("orderId", orderId);
@@ -71,8 +70,8 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public String createOrder(Integer memberId, Integer price) {
-		String sql = "INSERT `order` (`order_id`, `member_id`, `price`, `pay_status`, `created_date`, `last_modified_date`)"
-				+ " VALUES ( :orderId, :memberId , :price , :payStatus , :createdDate , :lastModifiedDate );";
+
+		String sql = "CALL CreateOrder(:orderId, :memberId , :price , :payStatus , :createdDate , :lastModifiedDate);";
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -96,8 +95,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public void createOrderDetails(String orderId, List<OrderDetail> orderDetailList) {
 		
-		String sql = "INSERT INTO `order_detail` (`order_item_sn`, `order_id`, `product_id`, `quantity`, `stand_price`, `item_price`) VALUES "
-				+ "(NULL, :orderId , :productId , :quantity , :standPrice , :itemPrice );";
+		String sql = "CALL CreateOrderDetails(:orderId , :productId , :quantity , :standPrice , :itemPrice);";
 		
 		MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[orderDetailList.size()];
 		

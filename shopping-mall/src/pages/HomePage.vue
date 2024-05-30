@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #row {
   display: flex;
   justify-content: center;

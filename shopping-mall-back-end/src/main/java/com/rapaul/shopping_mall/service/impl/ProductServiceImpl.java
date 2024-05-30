@@ -35,15 +35,15 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String createProduct(ProductRequest productRequest) {
-		
-		String maxProductId = productDao.getProductMaxId();
+
 		String prefix = "P"; 
-	    int serialNumber = Integer.parseInt(maxProductId.substring(1)) + 1; // 提取流水号并加一
-	    String productId = String.format("%s%03d", prefix, serialNumber);
-		productRequest.setProductId(productId);
-	    
-	    
-		return productDao.createProduct(productRequest);
+		String productId = "P001";
+		String maxProductId = productDao.getProductMaxId();	
+		if(maxProductId != null) {
+		    int serialNumber = Integer.parseInt(maxProductId.substring(1)) + 1; // 提取流水号并加一
+		    productId = String.format("%s%03d", prefix, serialNumber);	
+		}
+		return productDao.createProduct(productId, productRequest);
 	}
 	
 	

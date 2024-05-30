@@ -44,7 +44,7 @@
           :key="index"
         >
           <div>{{ detail?.product?.productName }}</div>
-          <div>{{ formatCurrency(detail?.stand_price) }}</div>
+          <div>{{ formatCurrency(detail?.standPrice) }}</div>
           <div>
             <input
               type="number"
@@ -127,12 +127,12 @@ export default {
               price: element.price,
               quantity: element.quantity,
             },
-            stand_price: element.price,
+            standPrice: element.price,
             quantity: 1,
             itemPrice: 0,
           };
 
-          let itemPrice = detail.stand_price * detail.quantity;
+          let itemPrice = detail.standPrice * detail.quantity;
           detail.itemPrice = itemPrice;
           sum_price += itemPrice;
 
@@ -144,14 +144,16 @@ export default {
 
       this.order.price = sum_price;
 
-      console.log(this.productList);
-      console.log(this.order);
+      if (this.order.orderDetail.length === 0) {
+        alert("請選擇商品");
+        return;
+      }
 
       this.openModal();
     },
 
     quantityChange(detail) {
-      detail.itemPrice = detail.stand_price * detail.quantity;
+      detail.itemPrice = detail.standPrice * detail.quantity;
       this.priceCalculate();
     },
 
@@ -182,10 +184,12 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          alert("訂單建立成功");
           this.getProducts();
           this.closeModal();
         })
         .catch((error) => {
+          alert("訂單建立失敗");
           console.error(error);
         });
     },
@@ -204,7 +208,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 table {
   width: 100%;
   margin-top: 20px;

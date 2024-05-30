@@ -3,8 +3,7 @@
     <h1>電商購物中心平台</h1>
     <nav>
       <ul>
-        <li @click="toProductList">產品總表</li>
-        <li @click="toOrderList">訂單紀錄</li>
+        <li @click="toProductSetting">產品總表</li>
         <li @click="logOut">登出</li>
       </ul>
     </nav>
@@ -13,14 +12,10 @@
 
 <script>
 export default {
-  name: "MemberHeader",
+  name: "UserHeader",
   methods: {
-    toProductList() {
-      this.$router.push("/product-list");
-    },
-
-    toOrderList() {
-      this.$router.push("/order-list");
+    toProductSetting() {
+      this.$router.push("/product-setting");
     },
 
     logOut() {

@@ -31,15 +31,17 @@ public class ProductDaoImpl implements ProductDao{
 	
 	@Override
 	public List<Product> getProducts(ProductQueryParams productQueryParams) {
-		
-		String sql = "SELECT product_id, product_name, price, quantity, "
-				+ "created_date, last_modified_date FROM product WHERE 1=1 ";
+
+		String sql = "CALL GetProducts(:inStock)";
 		
 		Map<String, Object> map = new HashMap<>();
 		
+		int inStock = -1;
 		if(productQueryParams.getInStock()) {
-			sql = sql + " AND quantity > 0";
+			inStock = 0;
 		}
+		
+		map.put("inStock", inStock);
 		
 		List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 		
@@ -49,9 +51,8 @@ public class ProductDaoImpl implements ProductDao{
 
 	@Override
 	public Product getProductById(String ProductId) {
-		
-		String sql = "SELECT product_id, product_name, price, quantity, "
-				+ "created_date, last_modified_date FROM product WHERE product_id = :productId";
+
+		String sql = "CALL GetProductById(:productId)";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("productId", ProductId);
@@ -68,7 +69,7 @@ public class ProductDaoImpl implements ProductDao{
 
 	@Override
 	public String getProductMaxId() {
-		String sql = "SELECT MAX(product_id) FROM product";
+		String sql = "CALL GetMaxProductId()";
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -80,7 +81,7 @@ public class ProductDaoImpl implements ProductDao{
 
 	@Override
 	public Integer countProduct() {
-		String sql = "SELECT COUNT(*) FROM product";
+		String sql = "CALL CountProducts()";
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -91,12 +92,12 @@ public class ProductDaoImpl implements ProductDao{
 
 
 	@Override
-	public String createProduct(ProductRequest productRequest) {
-		String sql = "INSERT product(product_id, product_name, price, quantity, created_date, last_modified_date)"
-				+ " VALUES ( :productId , :productName , :price , :quantity, :createdDate , :lastModifiedDate );";
+	public String createProduct(String productId, ProductRequest productRequest) {
+		
+		String sql = "CALL CreateProduct(:productId , :productName , :price , :quantity, :createdDate , :lastModifiedDate);";
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("productId", productRequest.getProductId());
+		map.put("productId", productId);
 		map.put("productName", productRequest.getProductName());
 		map.put("productName", productRequest.getProductName());
 		map.put("price", productRequest.getPrice());
@@ -108,7 +109,7 @@ public class ProductDaoImpl implements ProductDao{
 
 		namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map));
 		
-		return productRequest.getProductId();
+		return productId;
 		
 	}
 
@@ -116,8 +117,7 @@ public class ProductDaoImpl implements ProductDao{
 	@Override
 	public void updateQuantity(String productId, Integer quantity) {
 		
-		String sql = "UPDATE product SET quantity = :quantity, last_modified_date = :lastModifiedDate"
-				+ " WHERE product_id = :productId";
+		String sql = "CALL UpdateProductQuantity(:productId , :quantity , :lastModifiedDate);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("productId", productId);

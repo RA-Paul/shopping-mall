@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.rapaul.shopping_mall.dao.UserDao;
@@ -27,8 +24,7 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public Integer createUser(UserRegisterRequest userRegisterRequest) {
 		
-		String sql = "INSERT user(user_id, account, password, created_date, last_modified_date)"
-				+ " VALUES (null, :account , :password , :createdDate , :lastModifiedDate );";
+		String sql = "CALL CreateUser(:account , :password , :createdDate , :lastModifiedDate, @userId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("account", userRegisterRequest.getAccount());
@@ -38,11 +34,11 @@ public class UserDaoImpl implements UserDao{
 		map.put("createdDate", now);
 		map.put("lastModifiedDate", now);
 		
-		KeyHolder keyholder = new GeneratedKeyHolder();
+		namedParameterJdbcTemplate.update(sql, map);
 		
-		namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyholder);
-		
-		int userId = keyholder.getKey().intValue();
+		String sql1 = "SELECT @userId ;";
+		Map<String, Object> map1 = new HashMap<>();
+		int userId = namedParameterJdbcTemplate.queryForObject(sql1, map1, Integer.class);
 		
 		return userId;
 	}
@@ -51,7 +47,7 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public User getUserById(Integer userId) {
 
-		String sql = "SELECT user_id ,account, password, created_date, last_modified_date FROM user WHERE user_id = :userId ;";
+		String sql = "CALL GetUserById(:userId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("userId", userId);
@@ -69,7 +65,7 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public User getUserByAccount(String account) {
 		
-		String sql = "SELECT user_id ,account, password, created_date, last_modified_date FROM user WHERE account = :account ;";
+		String sql = "CALL GetUserByAccount(:account);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("account", account);

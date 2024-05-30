@@ -5,13 +5,14 @@
       <form @submit.prevent="handleSubmit">
         <div class="form-row">
           <label for="account">帳號:</label>
-          <input type="text" id="account" v-model="account" />
+          <input type="text" id="account" required v-model="account" />
         </div>
         <div class="form-row">
           <label for="password">密碼:</label>
-          <input type="password" id="password" v-model="password" />
+          <input type="password" id="password" required v-model="password" />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">登入</button>
+        <p><a @click="toUserRegister">還不是管理者？</a></p>
       </form>
     </div>
   </div>
@@ -28,8 +29,10 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // 處理表單提交邏輯
-      console.log(`Account: ${this.account}, Password: ${this.password}`);
+      if (this.account == "" || this.password == "") {
+        alert("帳號或密碼不得為空");
+        return;
+      }
       //發起登入請求
       this.$axios
         .post("/users/login", {
@@ -48,9 +51,13 @@ export default {
           this.$router.push("/product-setting");
         })
         .catch((error) => {
+          alert("帳號或密碼錯誤");
           // 登入失敗，處理錯誤
           console.error(error);
         });
+    },
+    toUserRegister() {
+      this.$router.push("/user-register");
     },
   },
 };
@@ -82,5 +89,15 @@ button {
   border-radius: 5px;
   width: 250px;
   margin: 0 auto;
+}
+
+p {
+  cursor: pointer;
+  font-size: 0.2em;
+  margin-bottom: 0px;
+}
+
+a:hover {
+  color: blue;
 }
 </style>

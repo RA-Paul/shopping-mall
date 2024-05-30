@@ -16,7 +16,7 @@ public interface ProductDao {
 	
 	Integer countProduct();
 	
-	String createProduct(ProductRequest productRequest);
+	String createProduct(String productId, ProductRequest productRequest);
 	
 	void updateQuantity(String productId, Integer quantity);
 	

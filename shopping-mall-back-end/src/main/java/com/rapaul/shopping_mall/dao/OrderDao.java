@@ -9,7 +9,7 @@ public interface OrderDao {
 
 	Order getOrderById(String orderId);
 	
-	List<Order> getOrderByMemberId(String memberId);
+	List<Order> getOrderByMemberId(Integer memberId);
 	
 	List<OrderDetail> getOrderDetailByOrderId(String orderId);
 

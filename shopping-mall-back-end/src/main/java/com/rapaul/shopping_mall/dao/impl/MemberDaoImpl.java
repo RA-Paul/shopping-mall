@@ -27,8 +27,7 @@ public class MemberDaoImpl implements MemberDao{
 	
 	@Override
 	public Integer createMember(MemberRegisterRequest memberRegisterRequest) {
-		String sql = "INSERT member(member_id, account, password, created_date, last_modified_date)"
-				+ " VALUES (null, :account , :password , :createdDate , :lastModifiedDate );";
+		String sql = "CALL CreateMember(:account , :password , :createdDate , :lastModifiedDate, @memberId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("account", memberRegisterRequest.getAccount());
@@ -38,18 +37,19 @@ public class MemberDaoImpl implements MemberDao{
 		map.put("createdDate", now);
 		map.put("lastModifiedDate", now);
 		
-		KeyHolder keyholder = new GeneratedKeyHolder();
+		namedParameterJdbcTemplate.update(sql, map);
 		
-		namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyholder);
-		
-		int memberId = keyholder.getKey().intValue();
+		String sql1 = "SELECT @memberId ;";
+		Map<String, Object> map1 = new HashMap<>();
+		int memberId = namedParameterJdbcTemplate.queryForObject(sql1, map1, Integer.class);
 		
 		return memberId;
 	}
 
 	@Override
 	public Member getMemberById(Integer memberId) {
-		String sql = "SELECT member_id ,account, password, created_date, last_modified_date FROM member WHERE member_id = :memberId ;";
+
+		String sql = "CALL GetMemberById(:memberId);";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("memberId", memberId);
@@ -65,7 +65,8 @@ public class MemberDaoImpl implements MemberDao{
 
 	@Override
 	public Member getMemberByAccount(String account) {
-		String sql = "SELECT member_id ,account, password, created_date, last_modified_date FROM member WHERE account = :account ;";
+		
+		String sql = "CALL GetMemberByAccount( :account );";
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("account", account);
