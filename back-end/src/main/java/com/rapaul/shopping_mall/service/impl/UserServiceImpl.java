@@ -10,9 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.rapaul.shopping_mall.dao.UserDao;
 import com.rapaul.shopping_mall.dto.UserLoginRequest;
+import com.rapaul.shopping_mall.dto.UserLoginResponse;
 import com.rapaul.shopping_mall.dto.UserRegisterRequest;
 import com.rapaul.shopping_mall.model.User;
 import com.rapaul.shopping_mall.service.UserService;
+import com.rapaul.shopping_mall.util.JwtUtil;
 
 @Component
 public class UserServiceImpl implements UserService{
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService{
 
 
 	@Override
-	public User login(UserLoginRequest userLoginRequest) {
+	public UserLoginResponse login(UserLoginRequest userLoginRequest) {
 		
 		User user = userDao.getUserByAccount(userLoginRequest.getAccount());
 		
@@ -69,7 +71,15 @@ public class UserServiceImpl implements UserService{
 		
 		// 比較密碼
 		if(user.getPassword().equals(hashedPassword)) {
-			return user;
+			
+			String token = JwtUtil.generateToken(user.getAccount(), user.getUserId());
+			
+			UserLoginResponse userLoginResponse = new UserLoginResponse();
+			userLoginResponse.setToken(token);
+			userLoginResponse.setUser(user);
+			
+			return userLoginResponse;
+			
 		}else {
 			log.warn("account {} 的密碼不正確", userLoginRequest.getAccount());
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

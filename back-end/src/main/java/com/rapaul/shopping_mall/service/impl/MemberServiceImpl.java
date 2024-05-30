@@ -10,9 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.rapaul.shopping_mall.dao.MemberDao;
 import com.rapaul.shopping_mall.dto.MemberLoginRequest;
+import com.rapaul.shopping_mall.dto.MemberLoginResponse;
 import com.rapaul.shopping_mall.dto.MemberRegisterRequest;
 import com.rapaul.shopping_mall.model.Member;
 import com.rapaul.shopping_mall.service.MemberService;
+import com.rapaul.shopping_mall.util.JwtUtil;
 
 @Component
 public class MemberServiceImpl implements MemberService{
@@ -43,8 +45,6 @@ public class MemberServiceImpl implements MemberService{
 
 	}
 
-
-
 	@Override
 	public Member getMemberById(Integer memberId) {
 		return memberDao.getMemberById(memberId);
@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService{
 
 
 	@Override
-	public Member login(MemberLoginRequest memberLoginRequest) {
+	public MemberLoginResponse login(MemberLoginRequest memberLoginRequest) {
 		
 		Member member = memberDao.getMemberByAccount(memberLoginRequest.getAccount());
 		
@@ -69,7 +69,13 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 比較密碼
 		if(member.getPassword().equals(hashedPassword)) {
-			return member;
+			
+			String token = JwtUtil.generateToken(member.getAccount(), member.getMemberId());
+			MemberLoginResponse memberLoginResponse = new MemberLoginResponse();
+			memberLoginResponse.setToken(token);
+			memberLoginResponse.setMember(member);
+			
+			return memberLoginResponse;
 		}else {
 			log.warn("account {} 的密碼不正確", memberLoginRequest.getAccount());
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

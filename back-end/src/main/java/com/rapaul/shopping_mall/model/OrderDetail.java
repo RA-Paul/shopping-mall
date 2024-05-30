@@ -1,6 +1,5 @@
 package com.rapaul.shopping_mall.model;
 
-import java.util.Date;
 
 public class OrderDetail {
 	

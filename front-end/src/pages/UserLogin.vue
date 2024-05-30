@@ -45,7 +45,8 @@ export default {
           const data = response.data;
 
           //紀錄登入資訊
-          this.$store.commit("SET_USER", data);
+          this.$store.commit("SET_USER", data.user);
+          this.$store.commit("SET_TOKEN", data.token);
 
           // 登入成功，導航到 product-setting 頁面
           this.$router.push("/product-setting");

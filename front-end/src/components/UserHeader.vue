@@ -20,7 +20,8 @@ export default {
 
     logOut() {
       // 清除登入資訊
-      this.$store.commit("SET_MEMBER", null);
+      this.$store.commit("SET_USER", null);
+      this.$store.commit("SET_TOKEN", "");
       // 導航到首頁
       this.$router.push("/");
     },

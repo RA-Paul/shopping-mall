@@ -33,4 +33,18 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+axios.interceptors.request.use(
+  (config) => {
+    const token = store.state.token;
+    if (token) {
+      console.log("token: " + token);
+      config.headers["Authorization"] = "Bearer " + token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 app.use(router).use(store).mount("#app");

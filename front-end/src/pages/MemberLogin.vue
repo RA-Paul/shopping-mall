@@ -47,7 +47,8 @@ export default {
           console.log(data);
 
           //紀錄登入資訊
-          this.$store.commit("SET_MEMBER", data);
+          this.$store.commit("SET_MEMBER", data.member);
+          this.$store.commit("SET_TOKEN", data.token);
 
           // 登入成功，導航到 product-list 頁面
           this.$router.push("/product-list");

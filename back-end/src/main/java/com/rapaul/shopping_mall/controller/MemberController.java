@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rapaul.shopping_mall.dto.MemberLoginRequest;
+import com.rapaul.shopping_mall.dto.MemberLoginResponse;
 import com.rapaul.shopping_mall.dto.MemberRegisterRequest;
 import com.rapaul.shopping_mall.model.Member;
 import com.rapaul.shopping_mall.service.MemberService;
@@ -22,11 +23,11 @@ public class MemberController {
 	private MemberService memberService;
 	
 	@PostMapping("/api/members/login")
-	public ResponseEntity<Member> login(@RequestBody @Valid MemberLoginRequest memberLoginRequest){
+	public ResponseEntity<MemberLoginResponse> login(@RequestBody @Valid MemberLoginRequest memberLoginRequest){
 		
-		Member member = memberService.login(memberLoginRequest);
+		MemberLoginResponse memberLoginResponse = memberService.login(memberLoginRequest);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(member);
+		return ResponseEntity.status(HttpStatus.OK).body(memberLoginResponse);
 		
 	}
 	

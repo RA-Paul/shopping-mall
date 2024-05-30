@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rapaul.shopping_mall.dto.UserLoginRequest;
+import com.rapaul.shopping_mall.dto.UserLoginResponse;
 import com.rapaul.shopping_mall.dto.UserRegisterRequest;
 import com.rapaul.shopping_mall.model.User;
 import com.rapaul.shopping_mall.service.UserService;
@@ -21,11 +22,11 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/api/users/login")
-	public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+	public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
 		
-		User user = userService.login(userLoginRequest);
+		UserLoginResponse userLoginResponse = userService.login(userLoginRequest);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
 		
 	}
 	

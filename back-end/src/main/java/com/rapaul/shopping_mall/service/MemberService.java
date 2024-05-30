@@ -1,6 +1,7 @@
 package com.rapaul.shopping_mall.service;
 
 import com.rapaul.shopping_mall.dto.MemberLoginRequest;
+import com.rapaul.shopping_mall.dto.MemberLoginResponse;
 import com.rapaul.shopping_mall.dto.MemberRegisterRequest;
 import com.rapaul.shopping_mall.model.Member;
 
@@ -11,5 +12,5 @@ public interface MemberService {
 	
 	Member getMemberById(Integer memberId);
 	
-	Member login(MemberLoginRequest memberLoginRequest);
+	MemberLoginResponse login(MemberLoginRequest memberLoginRequest);
 }
